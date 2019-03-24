@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>js-sports第二节</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+         div{
+            width: 100px;
+            height: 100px;
+            background-color: orange;
+            border-radius: 60px;
+            position: absolute;
+        } 
+        /* span{
+            position: absolute;
+            height: 100px;
+            width: 1px;
+            background-color: #ccc;
+            left: 300px;
+            top: 0px;
+        }  */
+         /* *{
+            padding: 0px;
+            margin: 0px;
+            list-style: none;
+        }
+         ul{ 
+            position: relative;
+             width: 600px;
+             height: 80px;
+             /* border: 1px solid black; */
+             /* margin: 100px auto 0;
+         }  */
+         /* ul li.nav{
+            
+             width: 148px;
+             height: 78px;
+             border: 1px solid #000;
+             color: #f40;
+             text-align: center;
+             line-height: 78px;
+             float: left;
+         }
+         ul li.bg{
+             position: absolute;
+             left: 0px;
+             top: 0px;
+             width: 150px;
+             height: 80px;
+             background: #f40;
+             opacity: 0.5;
+         }  */
+    </style>
+</head>
+<body>
+    <!-- <ul>
+        <li class="nav">wepack</li>
+        <li class="nav">vue</li>
+        <li class="nav">es6</li>
+        <li class="nav">node</li>
+        <li class="bg"></li>
+    </ul> -->
+    <div></div>
+     <!-- <span></span> -->
+    <script>
+        var odiv = document.getElementsByTagName('div')[0];
+        var lastleft = odiv.offsetLeft;
+        var lasttop = odiv.offsetTop;
+        odiv.onmousedown = function(e){
+                clearInterval(this.timer);
+               var event = e||window.event;
+               var disX = e.clientX - this.offsetLeft;
+               var disY = e.clientY - this.offsetTop;
+               var that = this;
+               var pagex = 0;
+               var pagey = 0;
+               document.onmousemove = function(e){
+                  var newleft = e.clientX -disX;
+                  var newtop = e.clientY - disY;
+                   pagex = newleft-lastleft;
+                   pagey = newtop -lasttop;
+                  lastleft = newleft;
+                  lasttop = newtop;
+                  that.style.left = newleft +'px';
+                  that.style.top =newtop+'px';
+               }
+               document.onmouseup= function(e){
+                   document.onmousemove = null;
+                   document.onmouseup = null;
+                   startmove(that,pagex,pagey);
+               }
+        }
+        
+        // odiv.onclick = function(){
+        //     clearInterval(timer);
+        //     startmove(this);
+        // }
+        function startmove(obj,pagex,pagey){
+            
+            var timer;
+                var g = 6;
+               obj.timer=setInterval(function(){
+                
+                   pagey+=g;
+                   var newleft = obj.offsetLeft+pagex,
+                     newtop = obj.offsetTop+pagey;
+                     if(newtop >=document.documentElement.clientHeight-obj.offsetHeight){
+                        pagey*=-1;
+                        pagex*=0.8;
+                        pagey*=0.8;
+                        newtop =document.documentElement.clientHeight-obj.offsetHeight;
+                     }
+                     if(newtop<=0){
+                        
+                         pagey*=-1;
+                         pagex*=0.8;
+                        pagey*=0.8;
+                        newtop=0;
+                       
+                     }
+                     if(newleft>=document.documentElement.clientWidth-obj.offsetWidth){
+                         pagex*=-1;
+                         pagex*=0.8;
+                        pagey*=0.8;
+                         newleft =document.documentElement.clientWidth-obj.offsetWidth;
+                     }
+                     if(newleft<=0){
+                        
+                         pagex*=-1;
+                         pagex*=0.8;
+                        pagey*=0.8;
+                        newleft=0;
+                       
+                     }
+                     obj.style.left = newleft+'px';
+                     obj.style.top = newtop+'px';
+                    if(Math.abs(pagex)<1){
+                        pagex=0;
+                    }
+                    if(Math.abs(pagey)<1){
+                        pagey=0;
+                    }
+                    if(pagex==0 && pagey==0 && newtop == document.documentElement.clientHeight-obj.offsetHeight){
+                        
+                        clearInterval(obj.timer)
+                        console.log('over');
+                    }
+               },30)
+        }
+ 
+
+
+
+        // var onav = Array.prototype.slice.call(document.getElementsByClassName('nav'),0);
+        // var obg = document.getElementsByClassName('bg')[0];
+        // onav.forEach(function(ele,index,self){
+        //     ele.onmouseenter = function(){
+        //         var newleft = this.offsetLeft;
+        //     startmove(obg, newleft);
+        //     }
+           
+        // });
+        // function startmove(obj,target){
+        //     clearInterval(obj.timer);
+        //     var ispeed = 20;
+        //     var a;
+        //     var u =0.8;
+        //     obj.timer = setInterval(function(){
+        //         a=(target-obj.offsetLeft)/8;
+        //         ispeed = ispeed+a;
+        //         ispeed*=u;
+        //         if(Math.abs(ispeed)<1&&Math.abs(target-obj.offsetLeft)< 1){
+                    
+        //             clearInterval(obj.timer);
+        //             obj.style.left = target+'px';
+        //         }else{
+        //             obj.style.left = ispeed + obj.offsetLeft +'px';
+        //         }
+        //     },30)
+        // }
+
+
+
+
+        // var odiv = document.getElementsByTagName('div')[0];
+        // var timer = null;
+        // odiv.onclick = function(){
+        //     startmove(this,300);
+        // }
+        // function startmove(obj,target){
+        //     clearInterval(obj.timer);
+        //     var ispeed = 20;
+        //     var a;
+        //     var u =0.8;
+        //     timer = setInterval(function(){
+        //         a=(target-obj.offsetLeft)/8;
+        //         ispeed = ispeed+a;
+        //         ispeed*=u;
+        //         if(Math.abs(ispeed)<1&&Math.abs(target-obj.offsetLeft)< 1){
+                    
+        //             clearInterval(obj.timer);
+        //         }else{
+        //             obj.style.left = ispeed + obj.offsetLeft +'px';
+        //         }
+        //     },30)
+        // }
+    </script>
+</body>
+</html>
